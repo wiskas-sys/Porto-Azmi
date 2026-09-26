@@ -1863,6 +1863,9 @@ svg {
   width: fit-content;
   color: var(--text);
   font-weight: 700;
+  /* Padding vertikal tipis supaya tinggi target sentuh mencapai 24px
+    minimum WCAG 2.2 tanpa mengubah tampilan teks. */
+  padding-block: 3px;
 }
 
 .footer-column a:hover {
@@ -1976,6 +1979,8 @@ svg {
   gap: 6px;
   color: var(--text);
   font-weight: 800;
+  /* Sama seperti link kontak di atas, tinggi target sentuh minimal 24px. */
+  padding-block: 4px;
 }
 
 .footer-bottom a:hover {
@@ -2804,6 +2809,44 @@ svg {
     align-items: flex-start;
     flex-direction: column;
   }
+
+  /* Checkout jadi bottom sheet di layar sempit. */
+  .checkout-layer {
+    padding: 0;
+    place-items: end center;
+  }
+
+  .checkout-dialog {
+    width: 100%;
+    max-height: 92dvh;
+    border-width: 2px 0 0;
+    border-radius: 28px 28px 0 0;
+    box-shadow: 0 -10px 40px rgba(53, 32, 35, 0.28);
+    transform: translateY(3%);
+  }
+
+  .checkout-layer.is-open .checkout-dialog {
+    transform: translateY(0);
+  }
+
+  .checkout-header {
+    padding: 20px 18px 16px;
+  }
+
+  .checkout-body,
+  .checkout-footer {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  .checkout-footer .button {
+    min-height: 50px;
+  }
+
+  .field-grid,
+  .method-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 520px) {
@@ -2977,6 +3020,10 @@ svg {
     border-radius: 27px;
   }
 
+  .checkout-header h2 {
+    font-size: 1.7rem;
+  }
+
   .modal-details {
     padding: 28px 22px;
   }
@@ -3065,6 +3112,992 @@ svg {
   .story-visual {
     min-height: 360px;
   }
+}
+
+/* ================================================================
+   Checkout demo
+   ================================================================ */
+.checkout-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  display: grid;
+  padding: 24px;
+  place-items: center;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.checkout-layer.is-open {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+
+.checkout-layer.is-open .modal-backdrop {
+  opacity: 1;
+}
+
+.checkout-dialog {
+  position: relative;
+  display: flex;
+  width: min(680px, 100%);
+  max-height: min(880px, calc(100dvh - 48px));
+  flex-direction: column;
+  overflow: hidden;
+  border: 2px solid var(--ink);
+  border-radius: 34px;
+  background: var(--surface);
+  box-shadow: 9px 10px 0 var(--ink);
+  transform: translateY(22px) scale(0.97);
+  transition: transform 0.4s var(--ease);
+}
+
+.checkout-layer.is-open .checkout-dialog {
+  transform: translateY(0) scale(1);
+}
+
+.checkout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.checkout-header h2 {
+  margin: 0;
+  font-size: 1.85rem;
+}
+
+.checkout-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.demo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border: 1.5px dashed var(--accent);
+  border-radius: var(--radius-control);
+  color: var(--accent);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: help;
+}
+
+.demo-badge svg {
+  width: 14px;
+  height: 14px;
+}
+
+.checkout-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  overscroll-behavior: contain;
+}
+
+.checkout-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.checkout-lead {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.checkout-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 24px 22px;
+  border-top: 1px solid var(--line);
+  background: var(--surface-soft);
+}
+
+.checkout-footer .button {
+  justify-content: center;
+}
+
+.checkout-footer .button:disabled {
+  cursor: progress;
+  opacity: 0.72;
+}
+
+/* Stepper, dipakai bersama oleh keranjang dan dialog checkout */
+.checkout-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 14px 20px;
+  margin: 0;
+  background: var(--surface-soft);
+  list-style: none;
+}
+
+.cart-layer .checkout-steps {
+  border-bottom: 1px solid var(--line);
+}
+
+.checkout-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.checkout-step:not(:last-child)::after {
+  position: absolute;
+  top: 15px;
+  left: calc(50% + 20px);
+  width: calc(100% - 40px);
+  height: 2px;
+  background: var(--line);
+  content: "";
+}
+
+.checkout-step.is-done:not(:last-child)::after {
+  background: var(--accent);
+}
+
+.checkout-step-dot {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  font-family: "Quicksand", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.checkout-step.is-current .checkout-step-dot {
+  border-color: var(--ink);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.checkout-step.is-done .checkout-step-dot {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0;
+}
+
+.checkout-step.is-done .checkout-step-dot::after {
+  width: 11px;
+  height: 6px;
+  border: 2.5px solid currentColor;
+  border-top: 0;
+  border-right: 0;
+  transform: rotate(-45deg) translateY(-2px);
+  content: "";
+}
+
+.checkout-step-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.checkout-step.is-current .checkout-step-label,
+.checkout-step.is-done .checkout-step-label {
+  color: var(--text);
+}
+
+/* Form */
+.field-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.field-required {
+  color: var(--accent);
+}
+
+.field-optional {
+  padding: 3px 8px;
+  border-radius: var(--radius-control);
+  background: var(--surface-peach);
+  color: var(--muted);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.field-input {
+  width: 100%;
+  padding: 13px 18px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+  transition: border-color 0.25s ease, background-color 0.25s ease;
+}
+
+.field-textarea {
+  min-height: 84px;
+  border-radius: 18px;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.field-input::placeholder {
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+.field-input:hover {
+  border-color: var(--cheek);
+}
+
+.field-input[aria-invalid="true"] {
+  border-color: var(--accent);
+  background: var(--surface-pink);
+}
+
+.field-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.field-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.form-alert,
+.payment-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--accent);
+  border-radius: var(--radius-media);
+  background: var(--surface-pink);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.form-alert {
+  margin: 0;
+}
+
+.form-alert svg,
+.payment-alert svg {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+}
+
+.payment-alert p {
+  margin: 4px 0 0;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.payment-alert-hint {
+  font-size: 0.76rem;
+  opacity: 0.85;
+}
+
+/* Metode pembayaran dan pengambilan */
+.fulfillment-set,
+.method-fieldset,
+.chip-fieldset {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.chip-fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border: 1.5px dashed var(--line);
+  border-radius: var(--radius-media);
+  background: var(--surface-soft);
+}
+
+.method-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.fulfillment-set .method-grid {
+  margin-top: 10px;
+}
+
+.method-option {
+  display: block;
+  cursor: pointer;
+}
+
+.method-card {
+  display: grid;
+  height: 100%;
+  padding: 15px 16px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-media);
+  background: var(--surface);
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  transition: border-color 0.25s ease, background-color 0.25s ease, transform 0.25s var(--ease);
+}
+
+.method-option:hover .method-card {
+  border-color: var(--cheek);
+  transform: translateY(-2px);
+}
+
+.method-option input:focus-visible + .method-card {
+  outline: 4px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.method-option input:checked + .method-card {
+  border-color: var(--ink);
+  background: var(--accent-soft);
+}
+
+.method-icon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--surface-peach);
+  color: var(--accent);
+}
+
+.method-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.method-body {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.method-body strong {
+  font-size: 0.88rem;
+}
+
+.method-body small {
+  color: var(--muted);
+  font-size: 0.7rem;
+  line-height: 1.4;
+}
+
+.method-check {
+  width: 20px;
+  height: 20px;
+  padding: 3px;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  color: transparent;
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.method-option input:checked + .method-card .method-check {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.chip-list,
+.account-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.account-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.chip-option,
+.account-option {
+  cursor: pointer;
+}
+
+.chip {
+  display: inline-flex;
+  padding: 8px 15px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  font-size: 0.76rem;
+  font-weight: 800;
+  transition: border-color 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+}
+
+.chip-option input:focus-visible + .chip,
+.account-option input:focus-visible + .account-card {
+  outline: 4px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.chip-option input:checked + .chip {
+  border-color: var(--ink);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.account-card {
+  display: flex;
+  padding: 11px 15px;
+  border: 1.5px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+  flex-direction: column;
+  gap: 2px;
+  transition: border-color 0.25s ease, background-color 0.25s ease;
+}
+
+.account-card strong {
+  font-size: 0.74rem;
+}
+
+.account-card small {
+  color: var(--muted);
+  font-family: "Quicksand", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.account-option input:checked + .account-card {
+  border-color: var(--ink);
+  background: var(--accent-soft);
+}
+
+/* Meter ongkos antar */
+.delivery-meter {
+  display: flex;
+  padding: 16px;
+  border-radius: var(--radius-media);
+  background: var(--surface-butter);
+  flex-direction: column;
+  gap: 11px;
+}
+
+.delivery-meter-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.delivery-meter-copy strong {
+  font-size: 0.85rem;
+}
+
+.delivery-meter-copy span {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.delivery-track {
+  height: 8px;
+  overflow: hidden;
+  border-radius: var(--radius-control);
+  background: rgba(81, 54, 51, 0.14);
+}
+
+.delivery-track span {
+  display: block;
+  width: var(--delivery-progress, 0%);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width 0.45s var(--ease);
+}
+
+/* Ringkasan */
+.confirm-block {
+  padding: 17px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-media);
+  background: var(--surface-soft);
+}
+
+.confirm-heading {
+  margin: 0 0 13px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.summary-list {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.summary-item {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  gap: 11px;
+  align-items: center;
+}
+
+.summary-item-visual {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 13px;
+  background: var(--surface-pink);
+  font-size: 1.4rem;
+}
+
+.summary-item-info {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.summary-item-info strong {
+  overflow: hidden;
+  font-size: 0.84rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.summary-item-info small {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.summary-item-total {
+  font-size: 0.84rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.summary-item-empty {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.detail-list {
+  display: flex;
+  margin: 0;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-list > div {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.detail-list dt {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.detail-list dd {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.totals-block {
+  display: flex;
+  padding: 15px 17px;
+  border-radius: var(--radius-media);
+  background: var(--surface-butter);
+  flex-direction: column;
+  gap: 7px;
+}
+
+.totals-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 0.82rem;
+}
+
+.totals-row strong {
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.totals-row-grand {
+  padding-top: 8px;
+  margin-top: 3px;
+  border-top: 1.5px dashed rgba(81, 54, 51, 0.22);
+  font-size: 0.95rem;
+}
+
+.totals-row-grand strong {
+  color: var(--accent);
+  font-family: "Baloo 2", cursive;
+  font-size: 1.5rem;
+}
+
+/* Demo switch dan catatan */
+.demo-toggle {
+  display: grid;
+  padding: 14px 16px;
+  border: 1.5px dashed var(--line);
+  border-radius: var(--radius-media);
+  background: var(--surface-soft);
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 13px;
+  align-items: center;
+  cursor: pointer;
+  transition: border-color 0.25s ease, background-color 0.25s ease;
+}
+
+.demo-toggle:hover {
+  border-color: var(--cheek);
+}
+
+.demo-toggle input:focus-visible + .demo-toggle-track {
+  outline: 4px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.demo-toggle-track {
+  position: relative;
+  display: block;
+  width: 48px;
+  height: 27px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--bg);
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.demo-toggle-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: transform 0.25s var(--ease), background-color 0.25s ease;
+}
+
+.demo-toggle input:checked + .demo-toggle-track {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.demo-toggle input:checked + .demo-toggle-track .demo-toggle-knob {
+  background: var(--accent);
+  transform: translateX(21px);
+}
+
+.demo-toggle-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.demo-toggle-copy strong {
+  font-size: 0.82rem;
+}
+
+.demo-toggle-copy small {
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.demo-note {
+  display: flex;
+  padding: 12px 15px;
+  margin: 0;
+  border-radius: 18px;
+  background: var(--surface-soft);
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  gap: 9px;
+}
+
+.demo-note svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+/* Keadaan memproses */
+.processing-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  gap: 10px;
+}
+
+.processing-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: checkout-spin 0.7s linear infinite;
+}
+
+@keyframes checkout-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Layar sukses */
+.checkout-panel-success {
+  gap: 20px;
+}
+
+.success-hero {
+  display: flex;
+  padding: 19px;
+  border-radius: var(--radius-card);
+  background: var(--surface-butter);
+  align-items: center;
+  gap: 15px;
+}
+
+.success-mark {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.success-mark svg {
+  width: 26px;
+  height: 26px;
+}
+
+.success-kicker {
+  margin: 0 0 1px;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.success-order {
+  display: block;
+  font-family: "Baloo 2", cursive;
+  font-size: 1.65rem;
+  letter-spacing: 0.02em;
+  overflow-wrap: anywhere;
+}
+
+.success-meta {
+  margin: 11px 0 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.qr-card {
+  display: flex;
+  padding: 15px;
+  margin-bottom: 13px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-media);
+  background: var(--surface);
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.qr-code {
+  width: 152px;
+  height: 152px;
+  color: var(--ink);
+  border-radius: 14px;
+}
+
+.qr-caption {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.68rem;
+  text-align: center;
+}
+
+.account-detail {
+  display: flex;
+  padding: 15px 17px;
+  margin-bottom: 13px;
+  border: 1.5px dashed var(--accent);
+  border-radius: var(--radius-media);
+  background: var(--surface-pink);
+  flex-direction: column;
+  gap: 3px;
+}
+
+.account-detail strong {
+  font-family: "Quicksand", sans-serif;
+  font-size: 1.32rem;
+  letter-spacing: 0.05em;
+  overflow-wrap: anywhere;
+}
+
+.account-detail-label {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.instruction-list {
+  padding-left: 20px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.instruction-list li::marker {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.instruction-note {
+  padding: 10px 13px;
+  margin: 11px 0 0;
+  border-radius: 16px;
+  background: var(--surface-butter);
+  font-size: 0.78rem;
+}
+
+/* Riwayat pesanan di keranjang */
+.order-history {
+  padding: 0 24px 20px;
+}
+
+.cart-layer .order-history-card {
+  display: flex;
+  padding: 14px 16px;
+  border: 1.5px dashed var(--line);
+  border-radius: var(--radius-media);
+  background: var(--surface-soft);
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.order-history-icon {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.order-history-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.order-history-body {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.order-history-body strong {
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.order-history-id {
+  font-family: "Quicksand", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  overflow-wrap: anywhere;
+}
+
+.order-history-meta {
+  color: var(--muted);
+  font-size: 0.7rem;
 }
 
 /* Accessibility preferences */

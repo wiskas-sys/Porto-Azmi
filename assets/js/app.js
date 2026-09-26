@@ -349,6 +349,14 @@
     }, 60);
   }
 
+  // Siarkan salinan keranjang ke modul lain (checkout.js) supaya memakai
+  // sumber data yang sama walau localStorage tidak bisa ditulis.
+  function notifyCartChanged() {
+    window.dispatchEvent(new CustomEvent('bunnie-bloom:cart-changed', {
+      detail: { cart: { ...state.cart } }
+    }));
+  }
+
   function addToCart(productId, quantity = 1) {
     const product = getProduct(productId);
     if (!product) return;
@@ -364,6 +372,7 @@
         : `${product.name} ditambahkan ke keranjang.`
     );
     renderCart();
+    notifyCartChanged();
     bounceCartBadge();
   }
 
@@ -388,6 +397,7 @@
 
     saveCart();
     renderCart();
+    notifyCartChanged();
   }
 
   function bounceCartBadge() {
@@ -811,6 +821,13 @@
   });
 
   document.querySelector('[data-copy-order]').addEventListener('click', copyOrder);
+
+  // Jembatan ke checkout.js: dipakai setelah pesanan lunas. Saat itu app.js
+  // memuat ulang keranjang dari localStorage supaya bagian lain ikut kosong.
+  window.addEventListener('bunnie-bloom:cart-changed', () => {
+    state.cart = loadCart();
+    renderCart();
+  });
 
   document.querySelectorAll('[data-modal-close]').forEach((button) => {
     button.addEventListener('click', () => closeProductModal());

@@ -122,6 +122,45 @@
       <rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
       <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" fill="none" stroke="currentColor" stroke-width="2"/>
     </symbol>
+    <symbol id="icon-qr" viewBox="0 0 24 24">
+      <path d="M4 4h6v6H4V4Zm10 0h6v6h-6V4ZM4 14h6v6H4v-6Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/>
+      <path d="M14 14h2v2h-2v-2Zm4 0h2v2h-2v-2Zm-4 4h2v2h-2v-2Zm4 4h2v2h-2v-2Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-wallet" viewBox="0 0 24 24">
+      <path d="M4 7h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h12" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/>
+      <path d="M16 12h4v4h-4a2 2 0 0 1 0-4Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/>
+    </symbol>
+    <symbol id="icon-bank" viewBox="0 0 24 24">
+      <path d="m12 3 9 4.5H3L12 3Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/>
+      <path d="M5 11v6M10 11v6M14 11v6M19 11v6M3 20h18" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"/>
+    </symbol>
+    <symbol id="icon-store" viewBox="0 0 24 24">
+      <path d="M4 9h16v11H4V9Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/>
+      <path d="M3 9 5 4h14l2 5a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/>
+      <path d="M10 20v-5h4v5" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/>
+    </symbol>
+    <symbol id="icon-truck" viewBox="0 0 24 24">
+      <path d="M2 7h11v9H2V7Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/>
+      <path d="M13 10h4l3 3v3h-7v-6Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/>
+      <circle cx="6.5" cy="18.5" r="1.8" fill="none" stroke="currentColor" stroke-width="2"/>
+      <circle cx="16.5" cy="18.5" r="1.8" fill="none" stroke="currentColor" stroke-width="2"/>
+    </symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24">
+      <path d="m4 12.5 5 5L20 6.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
+    </symbol>
+    <symbol id="icon-alert" viewBox="0 0 24 24">
+      <path d="M12 4 2.5 20h19L12 4Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/>
+      <path d="M12 10v4.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"/>
+      <circle cx="12" cy="17.4" r="1.1" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24">
+      <circle cx="12" cy="8" r="3.6" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M4.5 20a7.5 7.5 0 0 1 15 0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"/>
+    </symbol>
+    <symbol id="icon-lock" viewBox="0 0 24 24">
+      <rect x="4" y="10" width="16" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"/>
+    </symbol>
   </svg>
 
   <header class="site-header" data-header>
@@ -433,8 +472,8 @@
           <li class="step-item reveal">
             <span class="step-number">2</span>
             <div class="step-icon" aria-hidden="true">📝</div>
-            <h3>Tulis pesanan</h3>
-            <p>Salin ringkasan pesanan lalu kirim ke kanal kami.</p>
+            <h3>Bayar dengan cara kamu</h3>
+            <p>Isi data singkat lalu pilih QRIS, virtual account, e-wallet, transfer bank, atau bayar di kedai.</p>
           </li>
           <li class="step-item reveal">
             <span class="step-number">3</span>
@@ -530,6 +569,22 @@
           <svg aria-hidden="true"><use href="#icon-close"></use></svg>
         </button>
       </div>
+
+      <ol class="checkout-steps" data-step-indicator aria-label="Tahapan pemesanan">
+        <li class="checkout-step is-current" data-step="1">
+          <span class="checkout-step-dot" aria-hidden="true">1</span>
+          <span class="checkout-step-label">Keranjang</span>
+        </li>
+        <li class="checkout-step" data-step="2">
+          <span class="checkout-step-dot" aria-hidden="true">2</span>
+          <span class="checkout-step-label">Bayar</span>
+        </li>
+        <li class="checkout-step" data-step="3">
+          <span class="checkout-step-dot" aria-hidden="true">3</span>
+          <span class="checkout-step-label">Selesai</span>
+        </li>
+      </ol>
+
       <p class="sr-only" data-cart-live aria-live="polite" aria-atomic="true"></p>
       <div class="cart-items" data-cart-items></div>
       <div class="drawer-empty" data-cart-empty>
@@ -538,16 +593,61 @@
         <p>Belum ada cemilan yang menunggu. Pilih satu yang bikin senyum.</p>
         <button class="button button-primary" type="button" data-cart-close data-focus-search>Temukan menu</button>
       </div>
+      <div class="order-history" data-order-history hidden></div>
       <div class="cart-summary" data-cart-summary hidden>
         <div class="summary-row"><span>Subtotal</span><strong data-cart-total>Rp0</strong></div>
-        <p>Ongkos kirim dihitung setelah pesanan dikonfirmasi.</p>
-        <button class="button button-primary button-full" type="button" data-copy-order>
+        <p>Ongkos kirim dihitung setelah pesanan dikirim.</p>
+        <button class="button button-primary button-full" type="button" data-checkout-open>
+          <svg aria-hidden="true"><use href="#icon-arrow"></use></svg>
+          Lanjut ke Pembayaran
+        </button>
+        <button class="button button-ghost button-full" type="button" data-copy-order>
           <svg aria-hidden="true"><use href="#icon-copy"></use></svg>
           Salin Pesanan
         </button>
-        <button class="button button-ghost button-full" type="button" data-cart-close data-focus-search>Lihat menu</button>
       </div>
     </aside>
+  </div>
+
+  <!-- Checkout demo pembayaran. Kerangka di sini, isi langkah dirender checkout.js. -->
+  <div class="checkout-layer" data-checkout-layer hidden>
+    <div class="modal-backdrop" data-checkout-close></div>
+    <section class="checkout-dialog" role="dialog" aria-modal="true" aria-labelledby="checkout-title" data-checkout-dialog>
+      <header class="checkout-header">
+        <div class="checkout-heading">
+          <span class="drawer-kicker" data-checkout-kicker>Isi hatimu dulu</span>
+          <h2 id="checkout-title"><span data-checkout-title>Checkout</span></h2>
+        </div>
+        <div class="checkout-header-actions">
+          <span class="demo-badge" data-demo-badge>
+            <svg aria-hidden="true"><use href="#icon-lock"></use></svg>
+            Demo
+          </span>
+          <button class="icon-button" type="button" data-checkout-close aria-label="Tutup checkout">
+            <svg aria-hidden="true"><use href="#icon-close"></use></svg>
+          </button>
+        </div>
+      </header>
+
+      <ol class="checkout-steps" data-step-indicator aria-label="Tahapan pemesanan">
+        <li class="checkout-step is-current" data-step="1">
+          <span class="checkout-step-dot" aria-hidden="true">1</span>
+          <span class="checkout-step-label">Keranjang</span>
+        </li>
+        <li class="checkout-step" data-step="2">
+          <span class="checkout-step-dot" aria-hidden="true">2</span>
+          <span class="checkout-step-label">Bayar</span>
+        </li>
+        <li class="checkout-step" data-step="3">
+          <span class="checkout-step-dot" aria-hidden="true">3</span>
+          <span class="checkout-step-label">Selesai</span>
+        </li>
+      </ol>
+
+      <p class="sr-only" data-checkout-live aria-live="polite" aria-atomic="true"></p>
+      <div class="checkout-body" data-checkout-body></div>
+      <footer class="checkout-footer" data-checkout-footer></footer>
+    </section>
   </div>
 
   <!-- Modal detail produk diisi secara dinamis dari products.js. -->
@@ -568,6 +668,8 @@
 
   <!-- Data produk dimuat lebih dulu agar app.js dapat merender grid. -->
   <script src="assets/js/products.js"></script>
+  <script src="assets/js/payments.js"></script>
   <script src="assets/js/app.js"></script>
+  <script src="assets/js/checkout.js"></script>
 </body>
 </html>
