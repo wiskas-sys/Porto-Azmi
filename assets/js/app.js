@@ -902,13 +902,17 @@
   }, { passive: true });
 
   document.addEventListener('keydown', (event) => {
+    // Checkout opened on top of the cart. Escape is checkout.js's job, and
+    // the cart must stay open so focus has somewhere to return to.
+    const checkoutIsOpen = document.querySelector('[data-checkout-layer]')?.classList.contains('is-open') ?? false;
     if (event.key === 'Escape') {
       if (elements.modal.classList.contains('is-open')) closeProductModal();
-      else if (elements.cartLayer.classList.contains('is-open')) closeCart();
+      else if (!checkoutIsOpen && elements.cartLayer.classList.contains('is-open')) closeCart();
       else if (elements.menuToggle.getAttribute('aria-expanded') === 'true') closeMobileMenu(true);
     }
 
-    const overlayIsOpen = elements.modal.classList.contains('is-open')
+    const overlayIsOpen = checkoutIsOpen
+      || elements.modal.classList.contains('is-open')
       || elements.cartLayer.classList.contains('is-open')
       || elements.menuToggle.getAttribute('aria-expanded') === 'true';
     if (event.key === '/' && !overlayIsOpen) {
