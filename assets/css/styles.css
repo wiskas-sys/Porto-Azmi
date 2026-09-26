@@ -1401,7 +1401,7 @@ svg {
 .benefit-number {
   display: inline-block;
   margin-bottom: 8px;
-  color: var(--accent);
+  color: var(--accent-hover);
   font-family: "Baloo 2", cursive;
   font-size: 0.85rem;
   font-weight: 800;
