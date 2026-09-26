@@ -1,0 +1,16 @@
+# Paksa LF di repository dan di working tree.
+# Tanpa aturan ini, core.autocrlf membuat line ending tiap file
+# tidak seragam dan editor seperti VS Code bisa menandai file
+# sebagai berubah padahal isinya identik.
+* text=auto eol=lf
+
+# Binary tidak boleh disentuh line ending-nya.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
